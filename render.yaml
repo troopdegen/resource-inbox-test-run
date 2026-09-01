@@ -1,0 +1,20 @@
+# Render Blueprint — Resource Inbox landing page
+#
+# Static site. The deploy from this manifest is opt-in (autoDeploy: false),
+# matching the workshop's "trigger the deployment with render deploys command"
+# convention. To bootstrap with this Blueprint, run:
+#
+#   render blueprints validate   # → ./render.yaml (default)
+#   render blueprints apply      # (interactive; prints URL after apply)
+#
+# This file is committed to the repo for reproducibility. The live deployment
+# was created via the Render CLI; this manifest mirrors that configuration.
+
+services:
+  - type: static_site
+    name: resource-inbox-test-run
+    runtime: static
+    branch: main
+    buildCommand: npm run build
+    staticPublishPath: ./dist
+    autoDeploy: false
