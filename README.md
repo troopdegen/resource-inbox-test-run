@@ -4,7 +4,18 @@ A single, static, responsive Astro landing page for the
 **Resource Inbox** idea (Workshop 1 build). The page is sourced from five
 approved answers — every claim is traceable to one of them.
 
-> **Build status:** local build verified. Render deployment is pending authorization for Render to fetch the private GitHub repository. No backend, auth, or external runtime service has been added. The waitlist form does **not** submit anywhere yet (it is a static placeholder, confirmed below).
+> **Build status:** locally verified **and deployed** to Render at
+> https://resource-inbox-test-run.onrender.com/. No backend, auth, or external
+> runtime service has been added. The waitlist form does **not** submit
+> anywhere yet (it is a static placeholder, confirmed below).
+>
+> Note: earlier drafts of this README (and the linked
+> `../../workstreams/pre-hack-workshops-september-2026/docs/render-deployment-record.md`)
+> described the repo as private and the deploy as blocked. The operator
+> explicitly directed a public origin and a CLI-triggered Render deploy once
+> the work was authorized; that is what was implemented. The workstream-level
+> deployment record is the operator's authoritative log — reconcile there if
+> you change direction.
 
 ## Local development
 
@@ -94,3 +105,24 @@ page until you have a dated, approved source for each.
 A full prompt-and-output transcript is recorded in [`SETUP-LOG.md`](./SETUP-LOG.md).
 That log + this project tree is everything you need to reproduce the build in
 a live workshop.
+
+## Live deployment
+
+- **URL:** https://resource-inbox-test-run.onrender.com/
+- **Public repo:** https://github.com/troopdegen/resource-inbox-test-run
+- **Render service id:** `srv-dabl4a740ujc739i6a50` (static_site, free tier)
+- **Render dashboard:** https://dashboard.render.com/static/srv-dabl4a740ujc739i6a50
+- **Auto-deploy:** off. To republish after a `git push`:
+
+  ```sh
+  render deploys create srv-dabl4a740ujc739i6a50 --confirm
+  ```
+
+- **Render Blueprint manifest:** `render.yaml` is committed to the repo for
+  reproducibility. The live service was created via the CLI (per the
+  operator's "trigger with render deploys" preference).
+
+The deploy was triggered with the existing `render.yaml` ASTRO build flow:
+`npm run build` → publish `dist/`. The deployed HTML is self-contained
+(no external fonts, no analytics, no third-party scripts), preserving the
+local-only posture the workshop was scoped to.
