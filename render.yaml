@@ -11,9 +11,10 @@
 # was created via the Render CLI; this manifest mirrors that configuration.
 
 services:
-  - type: static_site
-    name: resource-inbox-test-run
+  - type: web
     runtime: static
+    name: resource-inbox-test-run
+    repo: https://github.com/troopdegen/resource-inbox-test-run
     branch: main
     buildCommand: npm run build
     staticPublishPath: ./dist
