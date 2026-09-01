@@ -1,0 +1,149 @@
+---
+// How it works — Mel's three concrete actions to question 3:
+//   1. paste a URL
+//   2. tag it
+//   3. confirm/update the AI's assessment + publish to subscribers
+// Mock UI element on the third step gives the page a concrete artifact moment
+// without inventing product screenshots.
+---
+
+<section id="how-it-works">
+  <div class="container">
+    <header class="section-head">
+      <p class="kicker">02 · How it works</p>
+      <h2>Three actions from link to library.</h2>
+    </header>
+
+    <ol class="steps">
+      <li class="step">
+        <span class="step__num" aria-hidden="true">01</span>
+        <div class="step__body">
+          <h3>Paste a URL</h3>
+          <p>Drop any link into the inbox. The system fetches, parses, and prepares a draft entry.</p>
+        </div>
+        <div class="step__demo" aria-hidden="true">
+          <span class="field field--demo">
+            <input type="url" value="https://example.com/prompt-caching-explained" readonly />
+            <button type="button">Ingest</button>
+          </span>
+        </div>
+      </li>
+
+      <li class="step">
+        <span class="step__num" aria-hidden="true">02</span>
+        <div class="step__body">
+          <h3>Tag it</h3>
+          <p>Pick a topic and a depth: <code class="chip">llm-cache</code> <code class="chip">production</code> <code class="chip">verified</code>. Tags become the index your agents will query.</p>
+        </div>
+        <div class="step__demo" aria-hidden="true">
+          <span class="chip">llm&#8209;cache</span>
+          <span class="chip">production</span>
+          <span class="chip">verified</span>
+        </div>
+      </li>
+
+      <li class="step">
+        <span class="step__num" aria-hidden="true">03</span>
+        <div class="step__body">
+          <h3>Confirm the AI assessment · publish</h3>
+          <p>The system drafts a one&#8209;paragraph verdict and a usefulness score. You skim the source, refine if needed, then publish to subscribers.</p>
+        </div>
+
+        <figure class="step__demo card" aria-hidden="true">
+          <figcaption>
+            <span class="kicker">AI verdict · draft</span>
+            <span class="verdict verdict--yes">Useful · 0.78</span>
+          </figcaption>
+          <p>
+            Concrete walk&#8209;through of anthropic.claude&#8209;3 prompt caching with
+            measured latency wins and the boundary conditions where it fails.
+          </p>
+          <ul class="access">
+            <li>you · 0 reads</li>
+            <li>subscribers · pending publish</li>
+          </ul>
+        </figure>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--gap-4);
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--gap-3);
+    row-gap: var(--gap-2);
+    padding-block: var(--gap-3);
+    border-top: var(--rule-hair);
+    align-items: start;
+  }
+  .step:first-child { border-top: 0; }
+
+  .step__num {
+    grid-row: 1 / span 2;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--ember);
+    letter-spacing: 0.05em;
+    padding-top: 0.2rem;
+  }
+
+  .step__body { grid-column: 2; }
+  .step__body p { max-width: 56ch; }
+
+  .step__demo {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  .field--demo { max-width: 28rem; }
+
+  .card {
+    display: grid;
+    gap: 0.6rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    background: var(--paper-deep);
+    max-width: 32rem;
+  }
+
+  .card figcaption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .verdict {
+    font-family: var(--font-mono);
+    font-size: var(--fs-mono);
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 0.18rem 0.6rem;
+  }
+  .verdict--yes { color: var(--verdict-yes); }
+
+  .access {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 1.25rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-mono);
+    color: var(--ink-mute);
+  }
+</style>

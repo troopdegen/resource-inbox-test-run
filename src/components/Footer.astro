@@ -1,0 +1,75 @@
+---
+// Footer — workshop tag, build status, scope reminders.
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <span class="footer__mark" aria-hidden="true">↘</span>
+      <span>Resource Inbox</span>
+    </div>
+
+    <p class="footer__meta">
+      Workshop 1 build · local only · no deploy yet · no sponsor logos, no
+       fabricated testimonials, no claimed user counts. Everything on this page
+       was sourced from five approved answers.
+    </p>
+
+    <ul class="footer__links">
+      <li><a href="#top">Back to top</a></li>
+      <li><a href="#how-it-works">How it works</a></li>
+      <li><a href="#waitlist">Waitlist</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: var(--gap-5);
+    border-top: var(--rule-hair);
+    background: var(--paper-deep);
+    padding-block: var(--gap-4) var(--gap-3);
+  }
+
+  .footer__inner {
+    display: grid;
+    gap: var(--gap-3);
+  }
+
+  .footer__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    color: var(--ink);
+  }
+
+  .footer__mark {
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--ink);
+    border-radius: 4px;
+    color: var(--ink);
+  }
+
+  .footer__meta {
+    font-size: var(--fs-small);
+    color: var(--ink-mute);
+    max-width: 60ch;
+    margin: 0;
+  }
+
+  .footer__links {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--gap-2);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-mono);
+  }
+</style>

@@ -1,0 +1,135 @@
+---
+// Sponsorship / model — Mel said the long-term direction is "Google-like":
+//   pay for a specific resource to surface higher, gated by community reviews.
+// Skill explicitly forbids invented prices, sponsor tiers, and logos.
+// So this section explains the model and is explicit that numbers are pending.
+
+const pending = [
+  { label: "Sponsorship tiers",         note: "Not yet defined" },
+  { label: "Review threshold",          note: "Validates a paid listing before it surfaces" },
+  { label: "Subscriber pricing",        note: "Not yet defined" },
+];
+---
+
+<section id="model">
+  <div class="container">
+    <header class="section-head">
+      <p class="kicker">04 · The model</p>
+      <h2>Sponsored visibility, gated by community validation.</h2>
+    </header>
+
+    <p class="lede">
+      The long-term shape is closer to a curated search index than to a feed. Anyone
+      can submit. Anyone can subscribe. Resources can be promoted — but a paid
+      listing only surfaces <em>after</em> the community has reviewed it.
+    </p>
+
+    <div class="model">
+      <article class="model__card">
+        <p class="kicker">Visibility</p>
+        <h3>Pay to surface</h3>
+        <p>
+          Resource owners can sponsor a specific listing so it appears higher in
+          queries for its topic. Submission, review, and access count stay public.
+        </p>
+      </article>
+
+      <article class="model__card">
+        <p class="kicker">Validation</p>
+        <h3>Required reviews</h3>
+        <p>
+          A sponsored listing is <strong>only eligible</strong> once a minimum
+          number of community reviews are attached. Without them, it stays on the
+          unverified shelf — visible to its submitter, not to subscribers.
+        </p>
+      </article>
+
+      <article class="model__card">
+        <p class="kicker">Sustainability</p>
+        <h3>Free read forever</h3>
+        <p>
+          Reading and tagging stay free. Sponsored listings fund curation. The
+          inbox stays open to anyone building in public.
+        </p>
+      </article>
+    </div>
+
+    <details class="pending">
+      <summary>Facts still requiring confirmation</summary>
+      <ul>
+        {pending.map(({ label, note }) => (
+          <li>
+            <strong>{label}</strong>
+            <span>— {note}</span>
+          </li>
+        ))}
+      </ul>
+    </details>
+  </div>
+</section>
+
+<style>
+  .lede {
+    font-size: 1.18rem;
+    line-height: 1.55;
+    max-width: 60ch;
+    margin-bottom: var(--gap-4);
+  }
+  .lede em { font-style: italic; color: var(--ink); }
+
+  .model {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--gap-3);
+    margin-bottom: var(--gap-3);
+  }
+
+  .model__card {
+    padding: var(--gap-3);
+    border: var(--rule-hair);
+    border-radius: 2px;
+    background: var(--paper-deep);
+  }
+
+  .model__card h3 {
+    margin-top: var(--gap-1);
+    margin-bottom: var(--gap-2);
+  }
+
+  .model__card p { max-width: none; }
+
+  .pending {
+    border: 1px dashed var(--rule);
+    border-radius: 2px;
+    padding: var(--gap-2) var(--gap-3);
+    color: var(--ink-soft);
+  }
+
+  .pending summary {
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: var(--fs-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .pending summary:hover { color: var(--ember); }
+
+  .pending ul {
+    margin: var(--gap-2) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .pending li {
+    font-size: var(--fs-small);
+    color: var(--ink-mute);
+  }
+  .pending strong { color: var(--ink); font-weight: 600; }
+
+  @media (max-width: 820px) {
+    .model { grid-template-columns: 1fr; }
+  }
+</style>

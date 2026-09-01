@@ -1,0 +1,105 @@
+---
+// Hero. Problem + promise + primary CTA, anchored to waitlist.
+---
+
+<section class="hero" id="top">
+  <div class="container hero__inner">
+    <p class="kicker">Resource Inbox · Workshop build</p>
+
+    <h1 class="hero__title">
+      A curated library for the AI resources <em>actually</em> worth opening.
+    </h1>
+
+    <p class="hero__lede">
+      You paste a URL. You tag it. The system drafts an AI verdict.
+      You confirm or refine it, then publish it to your subscribers — building a single,
+      queryable hub of <strong>community&#8209;validated</strong> documentation and how&#8209;to
+      guidance for any tech or topic.
+    </p>
+
+    <div class="hero__cta">
+      <a class="btn" href="#waitlist">
+        Join the waitlist
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="btn btn--ghost" href="#how-it-works">See how it works</a>
+    </div>
+
+    <dl class="hero__meta" aria-label="Status">
+      <div><dt>Status</dt><dd>Workshop 1 · local build</dd></div>
+      <div><dt>Deployment</dt><dd>Not yet</dd></div>
+      <div><dt>Signups</dt><dd>Static placeholder</dd></div>
+    </dl>
+  </div>
+</section>
+
+<style>
+  .hero {
+    border-top: 0;
+    padding-block: var(--gap-6) var(--gap-5);
+  }
+
+  .hero__title {
+    font-size: var(--fs-display);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    max-width: 22ch;
+    margin-top: var(--gap-3);
+  }
+
+  .hero__title em {
+    font-style: italic;
+    color: var(--ember);
+    font-weight: 400;
+  }
+
+  .hero__lede {
+    font-size: 1.18rem;
+    line-height: 1.55;
+    max-width: 60ch;
+    margin-top: var(--gap-3);
+    color: var(--ink-soft);
+  }
+
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: var(--gap-4);
+  }
+
+  .hero__meta {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--gap-3);
+    margin: var(--gap-5) 0 0;
+    padding-top: var(--gap-3);
+    border-top: var(--rule-hair);
+    max-width: 44rem;
+  }
+
+  .hero__meta div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .hero__meta dt {
+    font-family: var(--font-mono);
+    font-size: var(--fs-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+
+  .hero__meta dd {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--ink);
+  }
+
+  @media (max-width: 640px) {
+    .hero__meta { grid-template-columns: 1fr; }
+  }
+</style>

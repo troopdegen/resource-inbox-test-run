@@ -1,0 +1,87 @@
+---
+// Benefit — close paraphrase of Mel's answer to question 4:
+//   "A hub where a user can just point their agents and get good resources —
+//    documentation and feedback, on how to implement or understand a specific
+//    tech or topic."
+---
+
+<section id="benefit">
+  <div class="container">
+    <header class="section-head">
+      <p class="kicker">03 · What you get</p>
+      <h2>A hub your agents can read.</h2>
+    </header>
+
+    <div class="quote">
+      <p>
+        A month in, the inbox is no longer a pile of links — it's the
+        <strong>source of truth your agents query</strong> before they answer a
+        question about a specific tech or topic.
+      </p>
+    </div>
+
+    <div class="benefits">
+      <div>
+        <h3>For your agents</h3>
+        <p>
+          Entries are tagged, reviewed, and structured. A query like
+          <em>"give me the best verified resource on prompt caching"</em> returns a
+          handful — not the open web.
+        </p>
+      </div>
+      <div>
+        <h3>For your community</h3>
+        <p>
+          Subscribers see the same canon you curated, with your assessment and the
+          community's reviews attached. The library compounds with every submission.
+        </p>
+      </div>
+      <div>
+        <h3>For future you</h3>
+        <p>
+          Stop re&#8209;researching the same questions. The verification, the tag, and
+          the access count already exist — you query, you ship.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .quote {
+    border-left: 3px solid var(--ink);
+    padding: 0.25rem 0 0.25rem var(--gap-3);
+    margin-bottom: var(--gap-4);
+    max-width: 60ch;
+  }
+  .quote p {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    line-height: 1.4;
+    color: var(--ink);
+    max-width: none;
+  }
+  .quote strong { font-weight: 500; }
+
+  .benefits {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--gap-4);
+    margin-top: var(--gap-1);
+  }
+
+  .benefits h3::before {
+    content: "";
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: var(--ember);
+    border-radius: 50%;
+    margin-right: 0.55rem;
+    transform: translateY(-0.15rem);
+  }
+
+  @media (max-width: 820px) {
+    .benefits { grid-template-columns: 1fr; }
+  }
+</style>
