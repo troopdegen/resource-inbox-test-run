@@ -617,3 +617,124 @@ SERVICE_ID=$(render services list -o json \
 # 3. Trigger a fresh deploy
 render deploys create "$SERVICE_ID" --confirm
 ```
+
+---
+
+## Phase 7 — Post-deploy corrections
+
+The first live build exposed two stales: (a) Render's edge didn't auto-serve
+`index.html` at `/`, and (b) the page copy still claimed "no deploy yet". Both
+fixed and pushed; the live URL now matches the workshop reality.
+
+### 7.1 — `GET /` returned `404` even though `/index.html` was live
+
+```sh
+curl -sI https://resource-inbox-test-run.onrender.com/index.html
+```
+
+```
+HTTP/2 200
+last-modified: Tue, 01 Sep 2026 22:31:31 UTC
+rndr-id: b1fdd4c1-9d6d-40ed
+```
+
+```sh
+curl -sI https://resource-inbox-test-run.onrender.com/
+```
+
+```
+HTTP/2 404
+x-render-routing: no-server
+content-length: 10
+```
+
+`/index.html` worked; `/` did not. Render's static-site CDN with
+`x-render-routing: no-server` didn't auto-rewrite the document root to
+`/index.html`. The fix is a `public/_redirects` file (Astro copies `public/`
+into `dist/`):
+
+```
+/*    /index.html   200
+```
+
+Workflow:
+
+```sh
+echo '/*    /index.html   200' > public/_redirects
+npm run build          # dist/_redirects now present
+git add public/_redirects
+git -c user.name=troopdegen -c user.email=mel@innvertir.com \
+    commit -m "Add public/_redirects so Render's edge serves index.html at /"
+git push
+render deploys create srv-dabl4a740ujc739i6a50 --confirm
+```
+
+After that deploy:
+
+```sh
+curl -sI https://resource-inbox-test-run.onrender.com/
+```
+
+```
+HTTP/2 200
+content-type: text/html; charset=utf-8
+cf-cache-status: HIT
+```
+
+### 7.2 — Copy that still claimed "no deploy yet"
+
+The Hero status strip and Footer block were written *before* the deploy was
+authorized. Updated both to match reality:
+
+- `Hero.astro` — status strip now reads:
+
+  ```
+  Status:    Workshop 1 · live on Render
+  Deploys:   Manual (render deploys create)         # command in <code>
+  Signups:   Static placeholder
+  ```
+
+- `Footer.astro` — meta line now reads:
+
+  ```
+  Workshop 1 build · deployed to Render ·
+  resource-inbox-test-run.onrender.com.
+  No sponsor logos, no fabricated testimonials, no claimed user counts.
+  Everything on this page was sourced from five approved answers.
+  ```
+
+Note: Astro's HTML parser strips leading whitespace between the separator
+and the `<a>` tag. Using `·` (a separator-independent character) on either
+side of the URL avoids a stray missing-space glitch.
+
+### 7.3 — Final deploy chain (5 deploys total)
+
+| # | Commit   | sha     | Trigger     | Final status   |
+| :- | :-       | :-      | :-          | :-             |
+| 1 | initial  | 5567385 | (manual)    | canceled       |
+| 2 | first    | 5567385 | api         | deactivated    |
+| 3 | _redirs  | 6714900 | api         | deactivated    |
+| 4 | copy v1  | dbda6d2 | api         | deactivated    |
+| 5 | copy v2  | 93660b8 | api         | **live**       |
+
+`autoDeploy: off` holds — Render never auto-rebuilt; every deploy after #1
+was triggered explicitly via `render deploys create`. The workshop's
+"trigger the deployment with render deploys command" preference was honored.
+
+### 7.4 — Workstream-level doc to reconcile
+
+`../../workstreams/pre-hack-workshops-september-2026/docs/render-deployment-record.md`
+was authored *before* the operator authorized the public-origin flip and the
+CLI-driven deploy. It still records:
+
+- "GitHub repository: https://github.com/troopdegen/resource-inbox-test-run
+  (private)"
+- "Current blocker: Render CLI returned 'passed in repository URL is invalid
+  or unfetchable' ... Do not make it public as a workaround without Mel's
+  direction."
+
+Both states are stale. The operator explicitly waived that hesitation by
+directing a public origin and a CLI-triggered deploy. The deployment is
+live at https://resource-inbox-test-run.onrender.com/. The workstream doc is
+the operator's authoritative log — reconcile there if the operator wants the
+workstream timeline to reflect the actual sequence.
