@@ -339,3 +339,281 @@ each as a follow-up exercise:
 
 Each one is a clean follow-up topic. None of them belong on this page until
 the operator has dated, approved sources for any claims that would appear.
+
+---
+
+## Phase 6 — Deploy to Render (live, public origin)
+
+### Operator prompt
+
+> Perfect, now we'll need to deploy to render - the cli tool has been installed
+> and authenticated - i need you to set this directory as a git repo with a
+> public origin, gh cli tool is also available
+
+> go - you trigger the deployment with render deploys command
+
+### Pre-flight checks (what was already authenticated / installed)
+
+```sh
+gh auth status
+```
+
+```
+github.com
+  ✓ Logged in to github.com account troopdegen (keyring)
+  Token scopes: 'gist', 'project', 'read:org', 'repo', 'workflow'
+```
+
+```sh
+gh api user --jq '.login + " (" + (.name // "") + ")"'
+```
+
+```
+troopdegen (mel)
+```
+
+```sh
+which render && render --version
+```
+
+```
+/Users/mel/.local/bin/render
+render v2.26.0
+```
+
+```sh
+render whoami
+```
+
+```
+Name: mel
+Email: dev@innvertir.com
+```
+
+```sh
+git config --global user.name && git config --global user.email
+```
+
+```
+troopdegen
+mel@innvertir.com
+```
+
+### Surprise: a private GitHub repo of this exact directory already existed
+
+An on-host automation had already:
+
+```sh
+gh repo view troopdegen/resource-inbox-test-run --json nameWithOwner,visibility,isPrivate,url
+```
+
+```
+visiblity: PRIVATE
+url:     https://github.com/troopdegen/resource-inbox-test-run
+```
+
+…and pushed two commits authored as `troopdegen <mel@innvertir.com>`:
+
+```
+45d597d  Create Resource Inbox landing page
+4235836  Record pending Render deployment
+```
+
+Both commits contained the workshop's exact files (the source tree, README,
+SETUP-LOG). The automation was **not** the agent; it was running in parallel on
+the operator's machine. The agent worked with the existing state — it did not
+try to rewrite history or undo those commits.
+
+### Step 6.1 — Flip visibility to public (the operator asked for `public origin`)
+
+```sh
+gh repo edit troopdegen/resource-inbox-test-run \
+  --visibility public \
+  --accept-visibility-change-consequences
+```
+
+```sh
+gh repo view troopdegen/resource-inbox-test-run --json nameWithOwner,visibility,isPrivate,url
+```
+
+```
+isPrivate:  false
+visibility: PUBLIC
+url:        https://github.com/troopdegen/resource-inbox-test-run
+```
+
+### Step 6.2 — Add `render.yaml` Blueprint
+
+`render.yaml` is committed to the repo for reproducibility, even though the
+
+live service was created via the CLI. Two schema iterations:
+
+1. First attempt: `type: static_site` — rejected, "unknown type 'static_site'".
+2. Resolved schema (Render Blueprint): `type: web`, `runtime: static`,
+   `repo`, `branch`, `buildCommand`, `staticPublishPath`, `autoDeploy`.
+
+```sh
+git add render.yaml
+git -c user.name=troopdegen -c user.email=mel@innvertir.com \
+    commit -m "Add render.yaml Blueprint for static-site deployment"
+git push -u origin main
+```
+
+```
+ef29b95 Add render.yaml Blueprint for static-site deployment
+1 file changed, 20 insertions(+)
+```
+
+Validation then required `repo:` to be set:
+
+```sh
+render blueprints validate
+```
+
+```
+"valid": true
+```
+
+Final commit pushed:
+
+```
+5567385  render.yaml: align schema with Blueprint validator (type: web + runtime: static + repo)
+```
+
+### Step 6.3 — Create the Render static-site service directly via CLI
+
+The operator said: *"trigger the deployment with render deploys command"* —
+that meant CLI-driven, not Blueprint-driven. So the service is created via
+`render services create`, not `render blueprints apply`. `render.yaml` is a
+documentation-only mirror in this flow.
+
+```sh
+render services create \
+  --name resource-inbox-test-run \
+  --type static_site \
+  --repo https://github.com/troopdegen/resource-inbox-test-run \
+  --branch main \
+  --build-command "npm run build" \
+  --publish-directory dist \
+  --auto-deploy=false \
+  --confirm
+```
+
+```
+Created service resource-inbox-test-run (srv-dabl4a740ujc739i6a50)
+```
+
+Service summary (from `render services list -o json`):
+
+| Field    | Value                                       |
+| :------- | :------------------------------------------ |
+| id       | srv-dabl4a740ujc739i6a50                    |
+| type     | static_site                                  |
+| autoDeploy | no                                         |
+| branch   | main                                         |
+| repo     | https://github.com/troopdegen/resource-inbox-test-run |
+| buildCommand | npm run build                           |
+| publishPath  | dist                                   |
+| buildPlan    | starter  (free tier)                    |
+| dashboard    | https://dashboard.render.com/static/srv-dabl4a740ujc739i6a50 |
+| url          | https://resource-inbox-test-run.onrender.com |
+
+### Step 6.4 — Trigger the first deploy
+
+```sh
+render deploys create srv-dabl4a740ujc739i6a50 --confirm
+```
+
+```
+Created deploy dep-dabl4dks728c7390tncg for service srv-dabl4a740ujc739i6a50
+```
+
+Note: calling `render services create --confirm` also initiated an
+intermediate deploy (`dep-dabl4bn40ujc739i6g5g`, status `canceled`,
+`trigger: manual`) that was superseded by the `render deploys create` deploy.
+The final live deploy is `dep-dabl4dks728c7390tncg` (`trigger: api`).
+
+Build progress poll:
+
+```
+poll 1: build_in_progress
+poll 2: live
+```
+
+Total time to `live`: ~10 s.
+
+### Step 6.5 — Smoke test on the deployed URL
+
+```sh
+curl -s -o /dev/null -w "status=%{http_code} bytes=%{size_download} ct=%{content_type}\n" \
+  -L https://resource-inbox-test-run.onrender.com/
+```
+
+```
+status=200 bytes=13487 ct=text/html; charset=utf-8
+```
+
+```sh
+curl -s -o /dev/null -w "%{http_code} %{size_download}B %{content_type}\n" \
+  https://resource-inbox-test-run.onrender.com/_astro/index.YuTH_Cm_.css
+```
+
+```
+200 12711B text/css
+```
+
+```sh
+curl -s -o /dev/null -w "%{http_code} %{size_download}B\n" \
+  https://resource-inbox-test-run.onrender.com/favicon.svg
+```
+
+```
+200 749B
+```
+
+External network surface audit (`grep '(href|src)="…"' deployed HTML`):
+
+```
+href="/"
+href="/_astro/index.YuTH_Cm_.css"
+href="/favicon.svg"
+href="#how-it-works"
+href="#model"
+href="#top"
+href="#waitlist"
+```
+
+No external fonts, no analytics, no third-party scripts. Skill boundary
+honored after deployment as well.
+
+### Public artifacts (post-deploy)
+
+- Live URL:     **https://resource-inbox-test-run.onrender.com/**
+- Public repo:  https://github.com/troopdegen/resource-inbox-test-run
+- Deploy hash:  dep-dabl4dks728c7390tncg (live)
+- Service id:   srv-dabl4a740ujc739i6a50
+- Auto-deploy:  disabled — explicit `render deploys create srv-…` only
+
+### Replay recipe (deploy)
+
+Requires authenticated `gh` and `render` CLIs and the public repo in place.
+
+```sh
+# 1. Service (idempotent; failing-because-already-exists is fine)
+render services create \
+  --name resource-inbox-test-run \
+  --type static_site \
+  --repo https://github.com/troopdegen/resource-inbox-test-run \
+  --branch main \
+  --build-command "npm run build" \
+  --publish-directory dist \
+  --auto-deploy=false \
+  --confirm
+
+# 2. Resolve the service id
+SERVICE_ID=$(render services list -o json \
+  | python3 -c "import sys,json; print(json.load(sys.stdin)[0]['service']['id'])")
+
+# 3. Trigger a fresh deploy
+render deploys create "$SERVICE_ID" --confirm
+```
