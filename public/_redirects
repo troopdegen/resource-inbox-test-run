@@ -1,0 +1,12 @@
+# Render static-site rewrite rules.
+#
+# Render's edge CDN (x-render-routing: no-server) does not auto-serve
+# `index.html` for the document root unless we tell it to. This template
+# rewrite is enough for the single landing page the workshop ships.
+#
+# Format reference (Render):
+#   https://docs.render.com/static-site-redirects-rewrites
+#
+# Keep this file ASCII. Each line is one rule.
+
+/*    /index.html   200
