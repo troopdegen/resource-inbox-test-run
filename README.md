@@ -4,9 +4,7 @@ A single, static, responsive Astro landing page for the
 **Resource Inbox** idea (Workshop 1 build). The page is sourced from five
 approved answers — every claim is traceable to one of them.
 
-> **Build status:** local only. No deploy, no backend, no auth, no external
-> services. The waitlist form does **not** submit anywhere yet (it is a static
-> placeholder, confirmed below).
+> **Build status:** local build verified. Render deployment is pending authorization for Render to fetch the private GitHub repository. No backend, auth, or external runtime service has been added. The waitlist form does **not** submit anywhere yet (it is a static placeholder, confirmed below).
 
 ## Local development
 
@@ -74,7 +72,7 @@ page until you have a dated, approved source for each.
   or any other event/program (see `../burning-token/AGENTS.md`)
 - Product screenshots or dashboard mockups beyond the inline verdict card
 - Release date or waitlist launch date
-- Deployment target (Render is a later workshop topic — out of scope here)
+- Render deployment is pending authorization for Render to fetch the private GitHub repository. See `../../workstreams/pre-hack-workshops-september-2026/docs/render-deployment-record.md`.
 
 ## What this build deliberately excludes
 
@@ -87,7 +85,7 @@ page until you have a dated, approved source for each.
   scripts.
 - No form submission wired. The `<form>` posts to `#` and the README states
   it is a stub.
-- No deployment configuration (Render, Vercel, Netlify, etc.).
+- A private GitHub repository now contains the local landing page. Render CLI is authenticated and its workspace is set, but the Render GitHub integration has not yet been authorized to fetch that private repo. See `../../workstreams/pre-hack-workshops-september-2026/docs/render-deployment-record.md`.
 - No modified files in `../agentic-coding-workshop-deck/` or
   `../tenki-pi-sandbox-launcher/`.
 
